@@ -22,8 +22,13 @@ uv sync
 ## **Usage**
 
 ```
-uv run main.py <url>
+uv run main.py <url> [-l <file>]
 ```
 
 ---
 
+## **Flags**
+
+- -l/--log: log the output to a specified txt file (-l/--log <file.txt>)
+
+---

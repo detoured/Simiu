@@ -1,10 +1,11 @@
 [project]
 name = "simiu"
 version = "0.1.0"
-description = "Add your description here"
+description = "Simiu generates similar urls to a provided one and outputs a list that ranks them using perceptual hashing"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "imagehash>=4.3.2",
     "pillow>=12.3.0",
+    "requests>=2.34.2",
 ]

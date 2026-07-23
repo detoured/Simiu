@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import imagehash
 import sys
 import argparse
+import requests
 
 def swap(domain,tld,urls):
     for i in range(len(domain) - 1):
@@ -51,30 +52,39 @@ def compare_similar_phashes(similar_phashes,original_phash):
 
     return similarity
 
-def normalize_results(sorted_data):
+def normalize_results(sorted_data,args):
     results = []
-    for i in range(0,len(sorted_data)):
-        results.append(f"{i+1}. {sorted_data[i]["url"]}") 
+    if args.availability:
+        for i in range(0,len(sorted_data)):
+                results.append(f"{i+1}. {sorted_data[i]["url"]} - {check_availability(sorted_data[i]["url"])}")
+    else:
+        for i in range(0,len(sorted_data)):
+            results.append(f"{i+1}. {sorted_data[i]["url"]}") 
 
     return "\n".join(results)
 
 def handle_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("url",type=str,help="url to mimic")
-    parser.add_argument("-l","--log",type=str,help="log the output to a specified txt file (-l/--log <file.txt>)")
+    parser.add_argument("-l","--log",type=str,help="log the output to a specified txt file (-l/--log <file_name>)")
+    parser.add_argument("-a","--availability",action="store_true",help="include domain status (available / not available) in output")
+
     args = parser.parse_args()
 
     if not args.url:
         sys.exit("A url must be provided")
-    
-    if args.log and args.log.rsplit(".",1)[1] != "txt":
-        sys.exit("Log file must be a txt file")
 
     return args
 
 def log_output(args,results):
-    with open(args.log,"w") as file:
+    with open(f"{args.log}.txt","w") as file:
         file.write(results)
+
+def check_availability(url):
+    response = requests.get(f"https://rdap.verisign.com/com/v1/domain/{url}")
+    if response.status_code == 404:
+        return "available"
+    return "not available"
 
 def main():
     args = handle_args()
@@ -95,7 +105,7 @@ def main():
     similarity = compare_similar_phashes(url_to_phash,original_url_phash)
 
     sorted_similarity = sorted(similarity, key=lambda x: x["value"])
-    results = normalize_results(sorted_similarity)
+    results = normalize_results(sorted_similarity,args)
     print(results)
 
     if args.log:

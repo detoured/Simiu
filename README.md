@@ -22,13 +22,13 @@ uv sync
 ## **Usage**
 
 ```
-uv run main.py <url> [-l <file>]
+uv run main.py <url> [-l <file>] [-a]
 ```
 
 ---
 
 ## **Flags**
 
-- -l/--log: log the output to a specified txt file (-l/--log <file.txt>)
-
+- -l/--log: log the output to a specified txt file (-l/--log <file_name>)
+- -a/--availability: include domain status (available / not available) in output
 ---

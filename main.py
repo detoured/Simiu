@@ -10,15 +10,24 @@ def swap(domain,tld,urls):
         tmp = tmp_domain[i]
         tmp_domain[i] = tmp_domain[i+1]
         tmp_domain[i+1] = tmp
-        urls.append("".join(tmp_domain)+f".{tld}")
+        url = "".join(tmp_domain)+f".{tld}"
+        compare_new_url_to_original(url,f"{domain}.{tld}",urls)
+
 
 def repetition(domain,tld,urls):
     for i in range(len(domain)):
-        urls.append(domain[:i] + domain[i] * 2 + domain[i+1:] + f".{tld}")
+        url = domain[:i] + domain[i] * 2 + domain[i+1:] + f".{tld}"
+        compare_new_url_to_original(url,f"{domain}.{tld}",urls)
+
 
 def omission(domain,tld,urls):
     for i in range(len(domain)):
-        urls.append(domain[:i] + domain[i+1:] + f".{tld}")
+        url = domain[:i] + domain[i+1:] + f".{tld}"
+        compare_new_url_to_original(url,f"{domain}.{tld}",urls)
+
+def compare_new_url_to_original(new,original,urls):
+    if new != original:
+        urls.append(new)
 
 def render_text(url):
     size=(400, 80)
